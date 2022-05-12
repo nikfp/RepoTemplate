@@ -1,0 +1,14 @@
+schema: './src/lib/graphql-server/modules/**/*.ts'
+generates:
+  ./src/lib/graphql-server/modules:
+    preset: graphql-modules
+    presetConfig:
+      baseTypesPath: ../generated-types/graphql.ts
+      filename: generated/module-types.ts
+    plugins:
+      - add:
+          content: '/* eslint-disable */'
+      - typescript
+      - typescript-resolvers
+    config:
+      useTypeImports: true
