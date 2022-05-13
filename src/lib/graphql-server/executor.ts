@@ -10,14 +10,14 @@ const graphqlApplication = createApplication({
 
 const schema = graphqlApplication.schema;
 
-const graphqlServer = envelop({
+const graphqlExecutor = envelop({
 	plugins: [
 		useGraphQLModules(graphqlApplication),
 		useGraphQlJit(),
-		useErrorHandler((errors, _args) => {
+		useErrorHandler((errors) => {
 			console.error('useErrorHandler', JSON.stringify(errors, null, 2));
 		})
 	]
 });
 
-export { graphqlApplication, graphqlServer, schema };
+export { graphqlApplication, graphqlExecutor, schema };

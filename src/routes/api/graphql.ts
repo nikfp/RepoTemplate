@@ -1,5 +1,5 @@
 import type { RequestEvent } from '@sveltejs/kit/types/internal';
-import { graphqlServer, graphqlApplication, schema } from '../../lib/graphql-server/server';
+import { graphqlExecutor } from '../../lib/graphql-server/executor';
 
 export async function get() {
 	return {
@@ -17,7 +17,7 @@ export async function post(event: RequestEvent) {
 		execute,
 		schema
 		// pass in an initial context that all plugins can consume and extend
-	} = graphqlServer({ req: event.request });
+	} = graphqlExecutor({ req: event.request });
 
 	const { query, variables } = await event.request.json();
 
