@@ -17,8 +17,14 @@
 		"@graphql-codegen/add": "^3.1.1",
 		"@graphql-codegen/cli": "^2.6.2",
 		"@graphql-codegen/graphql-modules-preset": "^2.3.11",
+		"@graphql-codegen/typed-document-node": "^2.2.11",
 		"@graphql-codegen/typescript": "^2.4.11",
+		"@graphql-codegen/typescript-document-nodes": "^2.2.11",
+		"@graphql-codegen/typescript-operations": "^2.4.0",
 		"@graphql-codegen/typescript-resolvers": "^2.6.4",
+		"@kitql/client": "^0.5.3",
+		"@kitql/graphql-codegen": "^0.5.1",
+		"@kitql/vite-plugin-watch-and-run": "^0.3.0",
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/kit": "next",
 		"@typescript-eslint/eslint-plugin": "^5.10.1",
@@ -40,7 +46,7 @@
 		"@envelop/graphql-jit": "^4.2.2",
 		"@envelop/graphql-modules": "^3.3.2",
 		"@graphql-yoga/common": "^2.5.0",
-		"graphql": "^16.5.0",
+		"graphql": "16.0.0",
 		"graphql-modules": "^2.0.0"
 	}
 }
