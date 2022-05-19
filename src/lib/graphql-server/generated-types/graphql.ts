@@ -14,10 +14,25 @@ export type Scalars = {
   Float: number;
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  send: Scalars['String'];
+};
+
+
+export type MutationSendArgs = {
+  input?: InputMaybe<SendInput>;
+};
+
 export type Query = {
   __typename?: 'Query';
   greetings: Scalars['String'];
   hello: Scalars['String'];
+};
+
+export type SendInput = {
+  numbers: Scalars['Int'];
+  words: Scalars['String'];
 };
 
 
@@ -90,15 +105,25 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  SendInput: SendInput;
   String: ResolverTypeWrapper<Scalars['String']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
+  Int: Scalars['Int'];
+  Mutation: {};
   Query: {};
+  SendInput: SendInput;
   String: Scalars['String'];
+};
+
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  send?: Resolver<ResolversTypes['String'], ParentType, ContextType, Partial<MutationSendArgs>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -107,6 +132,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type Resolvers<ContextType = any> = {
+  Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };
 

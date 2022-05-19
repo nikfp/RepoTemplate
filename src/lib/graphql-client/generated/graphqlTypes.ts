@@ -1,6 +1,6 @@
-/* exlint-disable */
+/* eslint-disable */
 import gql from 'graphql-tag';
-import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -15,10 +15,25 @@ export type Scalars = {
   Float: number;
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  send: Scalars['String'];
+};
+
+
+export type MutationSendArgs = {
+  input?: InputMaybe<SendInput>;
+};
+
 export type Query = {
   __typename?: 'Query';
   greetings: Scalars['String'];
   hello: Scalars['String'];
+};
+
+export type SendInput = {
+  numbers: Scalars['Int'];
+  words: Scalars['String'];
 };
 
 export type HelloThereQueryVariables = Exact<{ [key: string]: never; }>;

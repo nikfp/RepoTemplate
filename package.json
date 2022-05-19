@@ -27,6 +27,8 @@
 		"@kitql/vite-plugin-watch-and-run": "^0.3.0",
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/kit": "next",
+		"@types/cookie": "^0.5.1",
+		"@types/uuid": "^8.3.4",
 		"@typescript-eslint/eslint-plugin": "^5.10.1",
 		"@typescript-eslint/parser": "^5.10.1",
 		"eslint": "^8.12.0",
@@ -46,7 +48,9 @@
 		"@envelop/graphql-jit": "^4.2.2",
 		"@envelop/graphql-modules": "^3.3.2",
 		"@graphql-yoga/common": "^2.5.0",
+		"cookie": "^0.5.0",
 		"graphql": "16.0.0",
-		"graphql-modules": "^2.0.0"
+		"graphql-modules": "^2.0.0",
+		"uuid": "^8.3.2"
 	}
 }
