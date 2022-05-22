@@ -31,3 +31,10 @@ generates:
       operationPrefix: 'KQL_'
       clientPath: './kitQLClient'
       useTypeImports: true
+  ./src/lib/graphql-validation/validationTypes.ts:
+    plugins:
+      - add:
+          content: '/* eslint-disable */'
+      - typescript
+    config:
+      useTypeImports: true

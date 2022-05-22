@@ -1,38 +1,43 @@
 <script lang="ts">
 	import { createForm } from 'felte';
+	import { validator } from '@felte/validator-zod';
+	import { reporter } from '@felte/reporter-svelte';
+	import { signinSchema as schema } from '../lib/validators/authValidators';
+	import type { SignInSchema } from '../lib/validators/authValidators';
+	import TextInput from '../lib/components/inputs/TextInput.svelte';
 
-	interface FormFields {
-		testing: string;
-		testnumber: number;
-	}
+	let formError = '';
 
-	const { form } = createForm<FormFields>({
-		onSubmit: (values) => {
-			console.log(values);
-		}
-	});
+	const { form } = createForm<SignInSchema>({
+		onSubmit: async (values) => {
+			formError = '';
 
-	let email = '';
-	let password = '';
-	let errorMessage = '';
+			const response = await fetch('/api/sign-in', {
+				method: 'POST',
+				credentials: 'include',
+				body: JSON.stringify(schema.parse(values))
+			});
+			const body = await response.json();
 
-	async function submit() {
-		errorMessage = '';
-		const response = await fetch('/api/sign-in', {
-			method: 'POST',
-			credentials: 'include',
-			body: JSON.stringify({ email, password })
-		});
-		if (response.status === 200) {
-			console.log('hit status block');
+			if (response.status === 200) {
+				return body;
+			}
+
+			const errorMessage =
+				body.message || 'An error occured when the form was submitted. Please try again.';
+
+			throw new Error(errorMessage);
+		},
+		onError: (errors) => {
+			formError = (errors as Error).message;
+		},
+		onSuccess: (response) => {
+			formError = '';
+			console.log(response);
 			window.location.href = '/';
-			return;
-		}
-
-		const body = await response.json();
-		errorMessage =
-			body.message || 'An error occured when the form was submitted. Please try again.';
-	}
+		},
+		extend: [validator({ schema }), reporter]
+	});
 </script>
 
 <h1>Sign In form</h1>
@@ -41,25 +46,12 @@
 <br />
 <br />
 <br />
-{#if errorMessage.length > 0}
-	<h3 class="error-message">{errorMessage}</h3>
+{#if formError.length > 0}
+	<p class="error-message">{formError}</p>
 {/if}
-<form on:submit|preventDefault={submit}>
-	<label for="email">Email</label>
-	<input type="text" name="email" id="email" bind:value={email} />
-	<label for="password">Password</label>
-	<input type="text" name="password" id="password" bind:value={password} />
-	<button type="button" on:click={submit}>Submit</button>
-</form>
-
-<br />
-<br />
-<br />
 <form use:form>
-	<label for="testing">Testing</label>
-	<input type="text" name="testing" id="testing" />
-	<label for="testnumber">Test Number </label>
-	<input type="number" name="testnumber" id="testnumber" />
+	<TextInput title="Email" name="email" />
+	<TextInput title="Password" name="password" />
 	<button type="submit">Submit</button>
 </form>
 

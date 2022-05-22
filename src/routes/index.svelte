@@ -2,15 +2,7 @@
 	import { KQL_HelloThere } from '$lib/graphql-client/graphqlStores';
 	import type { Load } from '@sveltejs/kit';
 
-	export const load: Load = async function ({ fetch, session }) {
-		if (!session.user) {
-			console.log('main page not showing session');
-			return {
-				status: 302,
-				redirect: '/sign-in'
-			};
-		}
-
+	export const load: Load = async function ({ fetch }) {
 		await KQL_HelloThere.queryLoad({ fetch });
 		return {};
 	};

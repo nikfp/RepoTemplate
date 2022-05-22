@@ -3,13 +3,7 @@ import { parse, serialize } from 'cookie';
 import type { RequestHandler } from '@sveltejs/kit';
 
 export const get: RequestHandler = async function ({ request }) {
-	const all = request.headers;
-
-	console.log(all);
-
 	const cookie = request.headers.get('cookie');
-
-	console.log();
 
 	const cookies = parse(cookie || '');
 

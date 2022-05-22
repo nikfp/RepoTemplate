@@ -9,6 +9,14 @@ export async function get() {
 }
 
 export async function post(event: RequestEvent) {
+	if (!event.locals.user) {
+		return {
+			status: 401,
+			body: {
+				message: 'Unauthorized'
+			}
+		};
+	}
 	const {
 		// Get the GraphQL execution functions with attached plugin handlers
 		parse,
