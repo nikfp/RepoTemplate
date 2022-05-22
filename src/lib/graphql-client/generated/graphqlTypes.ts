@@ -17,7 +17,7 @@ export type Scalars = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  send: Scalars['String'];
+  send: SendBack;
 };
 
 
@@ -31,6 +31,11 @@ export type Query = {
   hello: Scalars['String'];
 };
 
+export type SendBack = {
+  __typename?: 'SendBack';
+  send: Scalars['String'];
+};
+
 export type SendInput = {
   numbers: Scalars['Int'];
   words: Scalars['String'];
@@ -41,11 +46,26 @@ export type HelloThereQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type HelloThereQuery = { __typename?: 'Query', hello: string };
 
+export type SendItMutationVariables = Exact<{
+  input: SendInput;
+}>;
+
+
+export type SendItMutation = { __typename?: 'Mutation', send: { __typename?: 'SendBack', send: string } };
+
 
 export const HelloThere = gql`
     query HelloThere {
   hello
 }
     `;
+export const SendIt = gql`
+    mutation SendIt($input: SendInput!) {
+  send(input: $input) {
+    send
+  }
+}
+    `;
 
 export const HelloThereDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"HelloThere"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hello"}}]}}]} as unknown as DocumentNode<HelloThereQuery, HelloThereQueryVariables>;
+export const SendItDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SendIt"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SendInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"send"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"send"}}]}}]}}]} as unknown as DocumentNode<SendItMutation, SendItMutationVariables>;

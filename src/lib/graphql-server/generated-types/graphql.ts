@@ -16,7 +16,7 @@ export type Scalars = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  send: Scalars['String'];
+  send: SendBack;
 };
 
 
@@ -28,6 +28,11 @@ export type Query = {
   __typename?: 'Query';
   greetings: Scalars['String'];
   hello: Scalars['String'];
+};
+
+export type SendBack = {
+  __typename?: 'SendBack';
+  send: Scalars['String'];
 };
 
 export type SendInput = {
@@ -108,6 +113,7 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  SendBack: ResolverTypeWrapper<SendBack>;
   SendInput: SendInput;
   String: ResolverTypeWrapper<Scalars['String']>;
 };
@@ -118,12 +124,13 @@ export type ResolversParentTypes = {
   Int: Scalars['Int'];
   Mutation: {};
   Query: {};
+  SendBack: SendBack;
   SendInput: SendInput;
   String: Scalars['String'];
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  send?: Resolver<ResolversTypes['String'], ParentType, ContextType, Partial<MutationSendArgs>>;
+  send?: Resolver<ResolversTypes['SendBack'], ParentType, ContextType, Partial<MutationSendArgs>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -131,8 +138,14 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   hello?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 };
 
+export type SendBackResolvers<ContextType = any, ParentType extends ResolversParentTypes['SendBack'] = ResolversParentTypes['SendBack']> = {
+  send?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  SendBack?: SendBackResolvers<ContextType>;
 };
 

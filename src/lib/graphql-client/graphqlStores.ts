@@ -1,6 +1,6 @@
 import { browser } from '$app/env';
 import * as Types from '$lib/graphql-client/generated/graphqlTypes';
-import { defaultStoreValue, RequestStatus, ResponseResultType, type PatchType, type RequestQueryParameters, type RequestResult } from '@kitql/client';
+import { defaultStoreValue, RequestStatus, ResponseResultType, type PatchType, type RequestParameters, type RequestQueryParameters, type RequestResult } from '@kitql/client';
 import { get, writable } from 'svelte/store';
 import { kitQLClient } from './kitQLClient';
  
@@ -147,3 +147,52 @@ function KQL_HelloThereStore() {
  * KitQL Svelte Store with the latest `HelloThere` Operation
  */
 export const KQL_HelloThere = KQL_HelloThereStore();
+
+function KQL_SendItStore() {
+	const operationName = 'KQL_SendIt';
+	const operationType = ResponseResultType.Mutation;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.SendItMutation, Types.SendItMutationVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function mutateLocal(
+			params?: RequestParameters<Types.SendItMutationVariables>
+		): Promise<RequestResult<Types.SendItMutation, Types.SendItMutationVariables>> {
+			let { fetch, variables } = params ?? {};
+
+			const storedVariables = get(KQL_SendIt).variables;
+			variables = variables ?? storedVariables;
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.SendItMutation, Types.SendItMutationVariables>({
+				skFetch: fetch,
+				document: Types.SendItDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		mutate: mutateLocal,
+
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `SendIt` Operation
+ */
+export const KQL_SendIt = KQL_SendItStore();
