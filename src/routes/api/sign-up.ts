@@ -1,12 +1,9 @@
-import { createSession, getUserByEmail, registerUser } from './_db';
+import { createSession, getUserByEmail, registerUser } from '$lib/services/userService';
 import { serialize } from 'cookie';
 import type { RequestHandler } from '@sveltejs/kit';
 
 export const post: RequestHandler = async function ({ request }) {
 	const { email, password } = await request.json();
-	console.warn(
-		'WARNING - Please set project up for proper password hashing and salting. DO NOT CONTINUE TO PRODUCTION WITH INITIAL SETUP!'
-	);
 	const user = await getUserByEmail(email);
 
 	if (user) {
@@ -18,13 +15,28 @@ export const post: RequestHandler = async function ({ request }) {
 		};
 	}
 
-	// ⚠️ CAUTION: Do not store a plain password like this. Use proper hashing and salting.
-	await registerUser({
+	const newUser = await registerUser({
 		email,
 		password
 	});
 
-	const { id } = await createSession(email);
+	if (!newUser) {
+		return {
+			status: 500,
+			body: { message: 'Failed to register user' }
+		};
+	}
+
+	const session = await createSession(newUser.id);
+
+	if (!session) {
+		return {
+			status: 500,
+			body: { message: 'Failed to created session' }
+		};
+	}
+
+	const { id, expires } = session;
 	return {
 		status: 201,
 		headers: {
@@ -33,7 +45,7 @@ export const post: RequestHandler = async function ({ request }) {
 				httpOnly: true,
 				sameSite: 'strict',
 				secure: true,
-				maxAge: 60 * 60 * 24 * 7 // one week
+				expires
 			})
 		},
 		body: {

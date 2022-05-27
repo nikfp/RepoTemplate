@@ -2,13 +2,13 @@
 	import type { Load } from '@sveltejs/kit';
 
 	export const load: Load = async function ({ url, session }) {
-		console.log(url.pathname);
+		console.log('Layout Loading');
 		if (!session.user) {
 			if (url.pathname !== '/sign-in' && url.pathname !== '/sign-up') {
 				console.log('main page not showing session');
 				return {
 					status: 302,
-					redirect: '/sign-in'
+					redirect: `/sign-in?redirect=${url.pathname}&query=${url.search}`
 				};
 			}
 		}
@@ -19,20 +19,30 @@
 
 <script lang="ts">
 	import { session } from '$app/stores';
+	import { goto, invalidate } from '$app/navigation';
 
 	async function signout() {
 		try {
+			console.log('Sending sign out fetch');
 			const response = await fetch('/api/sign-out', {
 				credentials: 'include',
-				method: 'GET'
+				method: 'POST'
 			});
 
+			const body = await response.json();
+
+			console.log('sign out get complete');
+
 			if (response.status === 200) {
-				window.location.href = '/sign-in';
+				await invalidate('/sign-up');
+				session.update((values) => {
+					if (values.user) values.user = undefined;
+					return values;
+				});
+				goto('/sign-in');
 				return;
 			}
 
-			const body = await response.json();
 			const message = body.message || 'An error occured while signing out';
 
 			throw new Error(message);
@@ -48,6 +58,9 @@
 {#if userExists}
 	<p>Hello, {$session.user?.email}</p>
 	<button on:click={signout}>Sign out</button>
+	<br />
+	<a href="/">Home</a>
+	<a href="/page-a">Page A</a>
 {:else}
 	<a href="sign-in">Sign in here!</a> OR
 	<a href="sign-up">Sign up here!</a>

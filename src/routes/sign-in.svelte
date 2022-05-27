@@ -5,6 +5,12 @@
 	import { signinSchema as schema } from '../lib/validators/authValidators';
 	import type { SignInSchema } from '../lib/validators/authValidators';
 	import TextInput from '../lib/components/inputs/TextInput.svelte';
+	import { page } from '$app/stores';
+
+	const redirectUrl = $page.url.searchParams.get('redirect') ?? '/';
+	const query = $page.url.searchParams.get('query') ?? '';
+	console.log(redirectUrl);
+	console.log(query);
 
 	let formError = '';
 
@@ -31,10 +37,10 @@
 		onError: (errors) => {
 			formError = (errors as Error).message;
 		},
-		onSuccess: (response) => {
+		onSuccess: async (response) => {
 			formError = '';
 			console.log(response);
-			window.location.href = '/';
+			window.location.href = redirectUrl + query;
 		},
 		extend: [validator({ schema }), reporter]
 	});
