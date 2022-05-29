@@ -2,7 +2,7 @@
 	"name": "shop",
 	"version": "0.0.1",
 	"scripts": {
-		"dev": "concurrently \"svelte-kit dev\" \"yarn gen:watch\"",
+		"dev": "concurrently \"svelte-kit dev\" \"pnpm gen:watch\"",
 		"build": "svelte-kit build",
 		"package": "svelte-kit package",
 		"preview": "svelte-kit preview",
@@ -59,6 +59,7 @@
 		"felte": "^1.2.2",
 		"graphql": "16.0.0",
 		"graphql-modules": "^2.0.0",
+		"graphql-tag": "^2.12.6",
 		"prisma": "^3.14.0",
 		"tozod": "^3.0.0",
 		"uuid": "^8.3.2",

@@ -103,7 +103,7 @@ function KQL_HelloThereStore() {
 			params?: RequestQueryParameters<Types.HelloThereQueryVariables>
 		): Promise<void> => {
 			if (clientStarted) {
-				queryLocal(params); // No await in purpose, we are in a client navigation.
+				queryLocal(params); // No await on purpose, we are in a client navigation.
 			} else {
 				await queryLocal(params);
 			}
