@@ -8,7 +8,13 @@ const config = {
 	preprocess: preprocess(),
 
 	kit: {
-		adapter: adapter()
+		adapter: adapter(),
+		package: {
+			files: (filepath) => {
+				const isTestFile = /\S*\.spec.ts$|\S*\.setup.ts$/.test(filepath);
+				return !isTestFile;
+			}
+		}
 	}
 };
 
