@@ -1,4 +1,5 @@
 /* eslint-disable */
+// @ts-nocheck
 import type { GraphQLResolveInfo } from 'graphql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;

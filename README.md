@@ -1,18 +1,12 @@
-# create-svelte
+# sveltekit project template
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+This is designed as a starting point to get a usable project running quickly. This uses simple auth and makes the assumptions that Sveltekit will be used in an SSR scenario in either a serverless function or long running in a server.
 
-## Creating a project
+## Assumptions
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm init svelte
-
-# create a new project in my-app
-npm init svelte my-app
-```
+- PNPM is the primary package manager for this project. Other package managers can be used but aren't tested.
+- Prisma is used as the ORM. The database URL needs to be set as an environment variable
+  - In development, use "file:./test.db" and a local test database will be set up
 
 ## Developing
 

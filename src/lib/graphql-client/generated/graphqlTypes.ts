@@ -1,4 +1,5 @@
 /* eslint-disable */
+// @ts-nocheck
 import gql from 'graphql-tag';
 import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;

@@ -17,7 +17,7 @@
 			console.log('ERRORS');
 			console.log(error);
 		},
-		onSuccess: (success) => {
+		onSuccess: (_success) => {
 			console.log('SUCCESS');
 			console.log($KQL_SendIt.data?.send.send);
 		},

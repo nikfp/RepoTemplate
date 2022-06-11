@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { browser } from '$app/env';
 import * as Types from '$lib/graphql-client/generated/graphqlTypes';
 import { defaultStoreValue, RequestStatus, ResponseResultType, type PatchType, type RequestParameters, type RequestQueryParameters, type RequestResult } from '@kitql/client';

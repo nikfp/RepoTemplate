@@ -1,4 +1,5 @@
 /* eslint-disable */
+// @ts-nocheck
 import * as Types from "../../../generated-types/graphql";
 import * as gm from "graphql-modules";
 export namespace SendInputModule {

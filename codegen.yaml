@@ -9,6 +9,8 @@ generates:
     plugins:
       - add:
           content: '/* eslint-disable */'
+      - add:
+          content: '// @ts-nocheck'
       - typescript
       - typescript-resolvers
     config:
@@ -17,6 +19,8 @@ generates:
     plugins:
       - add:
           content: '/* eslint-disable */'
+      - add:
+          content: '// @ts-nocheck'
       - typescript
       - typescript-operations
       - typescript-document-nodes
@@ -25,16 +29,20 @@ generates:
       useTypeImports: true
   ./src/lib/graphql-client/graphqlStores.ts:
     plugins:
+      - add:
+          content: '// @ts-nocheck'
       - '@kitql/graphql-codegen'
     config:
       importBaseTypesFrom: $lib/graphql-client/generated/graphqlTypes
       operationPrefix: 'KQL_'
       clientPath: './kitQLClient'
       useTypeImports: true
-  ./src/lib/graphql-validation/validationTypes.ts:
+  ./src/lib/validators/validationTypes.d.ts:
     plugins:
       - add:
           content: '/* eslint-disable */'
+      - add:
+          content: '// @ts-nocheck'
       - typescript
     config:
       useTypeImports: true

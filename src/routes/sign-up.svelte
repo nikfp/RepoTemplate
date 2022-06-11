@@ -9,7 +9,7 @@
 
 	let formError = '';
 
-	const { form, errors } = createForm<SignUpSchema>({
+	const { form } = createForm<SignUpSchema>({
 		onSubmit: async (values) => {
 			formError = '';
 			const newValues = schema.parse(values);
