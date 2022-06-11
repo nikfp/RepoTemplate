@@ -7,17 +7,26 @@ This is designed as a starting point to get a usable project running quickly. Th
 - PNPM is the primary package manager for this project. Other package managers can be used but aren't tested.
 - Prisma is used as the ORM. The database URL needs to be set as an environment variable
   - In development, use "file:./test.db" and a local test database will be set up
+  - In production, change the provider to your dB of choice
+ 
+## Setting up
 
-## Developing
+Once you've cloned the repo, you need to do the following steps to get the dev environment set up:
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Install dependencies: `pnpm install`
 
-```bash
-npm run dev
+Create generated files: `pnpm generate`
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+Migrate dev database to current version:
+`pnpm exec prisma migrate dev`
+
+
+## Developing 
+
+The dev server is set up to run on localhost:3000
+
+Start the dev server and the file watcher for graphql:
+`pnpm dev`
 
 ## Building
 
