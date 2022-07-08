@@ -1,11 +1,14 @@
 import prisma from '../providers/database';
 import type { User } from '../providers/database';
 import bcrypt from 'bcrypt';
-import { v4 as uuid4 } from 'uuid';
 import { signinSchema } from '../validators/authValidators';
 import { logger } from '../utilities/logger';
 
 const location = 'userService';
+
+function getExpiryTime() {
+	return new Date(new Date().getTime() + 30000);
+}
 
 export async function getUserByEmail(email: string) {
 	return prisma.user.findUnique({ where: { email } });
@@ -55,14 +58,12 @@ export async function createSession(userId: string) {
 
 		if (!user) return Promise.reject(new Error('User not found'));
 
-		const sessionKey = uuid4();
-		const expiryTime = new Date(new Date().getTime() + 60000 * 5).toISOString();
+		const expires = getExpiryTime();
 
 		const session = await prisma.session.create({
 			data: {
-				sessionKey,
 				userId: user.id,
-				expires: expiryTime
+				expires
 			}
 		});
 
@@ -96,5 +97,38 @@ export async function removeSession(id: string) {
 			(error as Error).message || 'An error occured during the delete session operation';
 		logger(location, message);
 		return false;
+	}
+}
+
+export async function validateAndRefreshSession(sessionId: string) {
+	try {
+		const expires = getExpiryTime();
+		const session = await prisma.session.update({
+			where: {
+				id: sessionId
+			},
+			data: {
+				expires
+			},
+			include: {
+				user: {
+					select: {
+						email: true
+					}
+				}
+			}
+		});
+
+		return {
+			sessionId: session.id,
+			expiryTime: session.expires,
+			userEmail: session.user.email
+		};
+	} catch (error) {
+		const message =
+			(error as Error).message ||
+			'An error occured during the session validation and update operation';
+		logger(location, message);
+		return null;
 	}
 }

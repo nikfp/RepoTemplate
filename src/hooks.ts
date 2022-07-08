@@ -1,19 +1,32 @@
 import type { GetSession, Handle } from '@sveltejs/kit';
-import { parse } from 'cookie';
-import { getSession as dbSession, getUserById } from '$lib/services/userService';
+import { parse, serialize } from 'cookie';
+import { validateAndRefreshSession } from '$lib/services/userService';
 
 export const handle: Handle = async function ({ event, resolve }) {
+	if (event.routeId === 'api/sign-out') {
+		event.locals.user = undefined;
+		return resolve(event);
+	}
+
 	const cookies = parse(event.request.headers.get('cookie') || '');
 	console.log('LOGGING COOKIES');
 	console.log(cookies);
 	if (cookies.session_id) {
-		const session = await dbSession(cookies.session_id);
+		const session = await validateAndRefreshSession(cookies.session_id);
 		if (session) {
-			const user = await getUserById(session.userId);
-			if (user) {
-				event.locals.user = { email: user.email };
-				return resolve(event);
-			}
+			event.locals.user = { email: session.userEmail };
+			const response = await resolve(event);
+			response.headers.append(
+				'Set-Cookie',
+				serialize('session_id', session.sessionId, {
+					path: '/',
+					httpOnly: true,
+					sameSite: 'strict',
+					secure: true,
+					expires: session.expiryTime
+				})
+			);
+			return response;
 		}
 	}
 
@@ -29,5 +42,7 @@ export const getSession: GetSession = async function (event) {
 			}
 		};
 	}
-	return {};
+	return {
+		signOut: true
+	};
 };

@@ -1,6 +1,10 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
 
+	import {houdiniClient} from '$lib/graphql-client/client'; 
+	
+	houdiniClient.init();
+
 	export const load: Load = async function ({ url, session }) {
 		console.log('Layout Loading');
 		if (!session.user) {
@@ -20,6 +24,7 @@
 <script lang="ts">
 	import { session } from '$app/stores';
 	import { goto, invalidate } from '$app/navigation';
+	import SignOut from '$lib/components/SignOut.svelte';
 
 	async function signout() {
 		try {
@@ -64,5 +69,9 @@
 {:else}
 	<a href="sign-in">Sign in here!</a> OR
 	<a href="sign-up">Sign up here!</a>
+{/if}
+
+{#if $session.signOut}
+	<SignOut />
 {/if}
 <slot />

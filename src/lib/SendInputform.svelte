@@ -6,12 +6,12 @@
 	import { reporter } from '@felte/reporter-svelte';
 	import TextInput from './components/inputs/TextInput.svelte';
 	import NumberInput from './components/inputs/NumberInput.svelte';
-	import { KQL_SendIt } from './graphql-client/graphqlStores';
+	import {GQL_SendIt} from "$houdini"
 
 	const { form, errors } = createForm<Input>({
 		onSubmit: async (values) => {
 			const input = sendInputSchema.parse(values);
-			await KQL_SendIt.mutate({ fetch, variables: { input } });
+			await GQL_SendIt.mutate({ variables: { input } });
 		},
 		onError: (error) => {
 			console.log('ERRORS');
@@ -19,7 +19,7 @@
 		},
 		onSuccess: (_success) => {
 			console.log('SUCCESS');
-			console.log($KQL_SendIt.data?.send.send);
+			console.log($GQL_SendIt.data?.send.send);
 		},
 		extend: [validator({ schema: sendInputSchema }), reporter]
 	});

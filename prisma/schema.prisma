@@ -19,7 +19,6 @@ model User {
 
 model Session {
   id String @id @default(uuid())
-  sessionKey String @unique
   userId String
   user User @relation(fields: [userId], references: [id])
   expires DateTime

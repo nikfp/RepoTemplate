@@ -35,7 +35,7 @@ export const post: RequestHandler = async function ({ request }) {
 				path: '/',
 				httpOnly: true,
 				sameSite: 'strict',
-				secure: process.env.NODE_ENV === 'production',
+				secure: true,
 				expires
 			})
 		},

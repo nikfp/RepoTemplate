@@ -10,3 +10,5 @@ yarn-error.log
 **/*.db
 **/*.db-journal
 coverage
+$houdini
+graphql-generated

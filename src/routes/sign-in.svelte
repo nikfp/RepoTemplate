@@ -6,6 +6,7 @@
 	import type { SignInSchema } from '../lib/validators/authValidators';
 	import TextInput from '../lib/components/inputs/TextInput.svelte';
 	import { page } from '$app/stores';
+import { onMount } from 'svelte';
 
 	const redirectUrl = $page.url.searchParams.get('redirect') ?? '/';
 	const query = $page.url.searchParams.get('query') ?? '';

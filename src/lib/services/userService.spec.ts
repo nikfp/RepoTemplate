@@ -9,7 +9,8 @@ import {
 	getUserById,
 	registerUser,
 	removeSession,
-	validateUserCredentials
+	validateUserCredentials,
+	validateAndRefreshSession
 } from './userService';
 
 const users: { [key: string]: { data: Omit<User, 'id'> } } = {
@@ -154,7 +155,8 @@ describe('userService', async () => {
 			const session = await createSession(user?.id);
 			expect(session).not.toBeNull();
 			expect(session?.userId).to.equal(user.id);
-			expect(session?.sessionKey).toBeDefined();
+			expect(session?.expires).toBeDefined();
+			expect(session?.expires.valueOf()).toBeGreaterThan(Date.now());
 		});
 
 		it('throws not found error for invalid user ID', async () => {
@@ -235,4 +237,61 @@ describe('userService', async () => {
 			expect(sessionCount).equal(newSessionCount);
 		});
 	});
+
+	describe.only('validateAndRefreshSession', async () => {
+		let session: Session | null = null;
+
+		beforeEach(async () => {
+			const user = await prismaMock.user.findFirst({ where: { email: users.one.data.email } });
+
+			if (!user) throw new Error('User undefined');
+
+			const { id } = user;
+
+			session = await createSession(id);
+		});
+
+		it('returns null for invalid token', async () => {
+			const result = await validateAndRefreshSession('bad input');
+
+			expect(result).toBeNull();
+		});
+
+		it('returns session info for valid session', async () => {
+			console.log(`SESSION IS: ${session}`);
+			if (!session) throw new Error('Session not initialized');
+
+			const result = await validateAndRefreshSession(session?.id);
+
+			if (!result) throw new Error('Session information not found');
+
+			const { sessionId, expiryTime } = result;
+
+			expect(sessionId).toBeDefined();
+			expect(expiryTime).toBeDefined();
+		});
+
+		it('returns session with updated expiry time', async () => {
+			if (!session) throw new Error('Session not initialized');
+
+			const { expires } = session;
+			const initialTime = expires.valueOf();
+
+			await sleep(1);
+
+			const result = await validateAndRefreshSession(session.id);
+
+			if (!result) throw new Error('Session information not found');
+
+			const { expiryTime } = result;
+
+			const updatedExpires = expiryTime.valueOf();
+
+			expect(updatedExpires).toBeGreaterThan(initialTime);
+		});
+	});
 });
+
+function sleep(ms: number) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+}

@@ -7,12 +7,14 @@ declare namespace App {
 		user?: {
 			email: string;
 		};
+		signOut?: boolean;
 	}
 	// interface Platform {}
 	interface Session {
 		user?: {
 			email: string;
 		};
+		signOut?: boolean;
 	}
 	// interface Stuff {}
 }
