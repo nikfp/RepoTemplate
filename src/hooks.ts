@@ -26,6 +26,7 @@ export const handle: Handle = async function ({ event, resolve }) {
 					expires: session.expiryTime
 				})
 			);
+			response.headers.append('session-expiry', session.expiryTime.toISOString());
 			return response;
 		}
 	}

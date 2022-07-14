@@ -7,7 +7,7 @@ import { logger } from '../utilities/logger';
 const location = 'userService';
 
 function getExpiryTime() {
-	return new Date(new Date().getTime() + 30000);
+	return new Date(new Date().getTime() + 10 * 1000);
 }
 
 export async function getUserByEmail(email: string) {

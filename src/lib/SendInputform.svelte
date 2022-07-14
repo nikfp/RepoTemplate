@@ -26,7 +26,10 @@
 </script>
 
 <p>
-	{JSON.stringify($errors, null, 2)}
+	Errors: {JSON.stringify($errors, null, 2)}
+</p>
+<p>
+	Server response: {JSON.stringify($GQL_SendIt.data)}
 </p>
 <form use:form>
 	<TextInput title="Words" name="words" />

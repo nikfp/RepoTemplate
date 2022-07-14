@@ -1,5 +1,6 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
+	import {session} from '$app/stores'
 
 	import {houdiniClient} from '$lib/graphql-client/client'; 
 	
@@ -9,7 +10,6 @@
 		console.log('Layout Loading');
 		if (!session.user) {
 			if (url.pathname !== '/sign-in' && url.pathname !== '/sign-up') {
-				console.log('main page not showing session');
 				return {
 					status: 302,
 					redirect: `/sign-in?redirect=${url.pathname}&query=${url.search}`
@@ -22,21 +22,17 @@
 </script>
 
 <script lang="ts">
-	import { session } from '$app/stores';
 	import { goto, invalidate } from '$app/navigation';
 	import SignOut from '$lib/components/SignOut.svelte';
 
 	async function signout() {
 		try {
-			console.log('Sending sign out fetch');
 			const response = await fetch('/api/sign-out', {
 				credentials: 'include',
 				method: 'POST'
 			});
 
 			const body = await response.json();
-
-			console.log('sign out get complete');
 
 			if (response.status === 200) {
 				await invalidate('/sign-up');
