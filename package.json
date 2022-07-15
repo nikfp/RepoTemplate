@@ -3,7 +3,8 @@
 	"version": "0.0.1",
 	"scripts": {
 		"dev": "concurrently \"vite dev\" \"pnpm gen:watch\"",
-		"build": "svelte-kit build",
+		"build": "vite build",
+		"start": "vite dev",
 		"package": "svelte-kit package",
 		"preview": "svelte-kit preview",
 		"prepare": "svelte-kit sync",
